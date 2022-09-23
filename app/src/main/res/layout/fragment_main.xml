@@ -7,21 +7,33 @@
     android:background="@color/working"
     tools:context=".screens.main.MainFragment">
 
+    <EditText
+        android:id="@+id/minutesToWorking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="minutes to working"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.mikhaellopez.circularprogressbar.CircularProgressBar
         android:id="@+id/circularProgressBar"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:cpb_progressbar_width="10dp"
-        app:cpb_progressbar_color="@color/white"
         app:cpb_background_progressbar_color="#B3B3B3"
         app:cpb_background_progressbar_width="10dp"
+        app:cpb_progressbar_color="@color/white"
+        app:cpb_progressbar_width="10dp"
         app:cpb_round_border="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Working"
@@ -64,5 +76,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/circularProgressBar" />
+
+    <TextView
+        android:id="@+id/concentrationTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Время концентрации"
+        android:textColor="@color/white"
+        android:layout_margin="@dimen/app_margin"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startBtnStart" />
+
+    <TextView
+        android:id="@+id/restTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/app_margin"
+        android:text="Время отдыха"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/concentrationTime" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
