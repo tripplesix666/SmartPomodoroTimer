@@ -73,9 +73,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/app_margin"
-        android:stepSize="5"
-        android:value="25"
-        android:valueFrom="5"
+        android:stepSize="1"
+        android:value="25.0"
+        android:valueFrom="0"
         android:valueTo="60"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +87,7 @@
 
     <!--    Rest Slider-->
     <TextView
-        android:id="@+id/labelTimeToRest"
+        android:id="@+id/labelTimerMode"
         style="@style/headings"
         android:gravity="start"
         android:text="Время отдыха:"
@@ -99,7 +99,7 @@
         style="@style/headings"
         android:gravity="start"
         tools:text="5"
-        app:layout_constraintStart_toEndOf="@id/labelTimeToRest"
+        app:layout_constraintStart_toEndOf="@id/labelTimerMode"
         app:layout_constraintTop_toBottomOf="@+id/workingSlider" />
 
     <TextView
@@ -119,7 +119,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/app_normal_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelTimeToRest" />
+        app:layout_constraintTop_toBottomOf="@+id/labelTimerMode" />
 
     <TextView
         android:id="@+id/maxValueRestSlider"
@@ -139,7 +139,7 @@
         android:layout_marginHorizontal="@dimen/app_margin"
         android:stepSize="1"
         android:value="5"
-        android:valueFrom="1"
+        android:valueFrom="0"
         android:valueTo="25"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

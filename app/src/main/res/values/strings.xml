@@ -5,4 +5,6 @@
     <string name="main_btn_start">Начать</string>
     <string name="settings_select_language">Выберите язык:</string>
     <string name="settings_russian_language">Русский</string>
+    <string name="timerModeRest">Rest</string>
+    <string name="timerModeWork">Work</string>
 </resources>
