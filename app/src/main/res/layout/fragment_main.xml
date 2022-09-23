@@ -29,8 +29,10 @@
         app:cpb_round_border="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499" />
 
     <TextView
         android:id="@+id/textView"
@@ -47,13 +49,12 @@
         android:id="@+id/startTimeMinutes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="228dp"
         android:text="25"
         android:textColor="@color/black"
         android:textSize="100sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/circularProgressBar" />
 
     <TextView
         android:id="@+id/startTimeSeconds"
@@ -67,26 +68,47 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/startTimeMinutes" />
 
-    <Button
-        android:id="@+id/startBtnStart"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/startBtnPlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
         android:layout_margin="@dimen/app_margin"
-        android:text="@string/main_btn_start"
+        android:clickable="true"
+        android:src="@drawable/ic_play"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/circularProgressBar" />
+        app:layout_constraintTop_toBottomOf="@+id/circularProgressBar"
+        tools:layout_editor_absoluteX="327dp"
+        tools:layout_editor_absoluteY="607dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/startBtnPause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:visibility="gone"
+        android:layout_margin="@dimen/app_margin"
+        android:clickable="true"
+        android:src="@drawable/ic_pause"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/circularProgressBar"
+        tools:layout_editor_absoluteX="327dp"
+        tools:layout_editor_absoluteY="607dp" />
 
     <TextView
         android:id="@+id/concentrationTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/app_margin"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="72dp"
         android:text="Время концентрации"
         android:textColor="@color/white"
-        android:layout_margin="@dimen/app_margin"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startBtnStart" />
+        app:layout_constraintTop_toBottomOf="@+id/startBtnPlay" />
 
     <TextView
         android:id="@+id/restTime"
@@ -98,5 +120,7 @@
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/concentrationTime" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

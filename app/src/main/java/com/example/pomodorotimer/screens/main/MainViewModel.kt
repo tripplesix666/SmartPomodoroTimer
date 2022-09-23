@@ -12,10 +12,11 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     val liveDataSeconds = MutableLiveData<String>()
     val liveDataMinutes = MutableLiveData<String>()
     val liveDataMillisUntilFinished = MutableLiveData<String>()
+    private lateinit var timer: CountDownTimer
 
     fun startTimer(millisUntilFinished: Long) {
         showToast("$millisUntilFinished")
-        object : CountDownTimer(millisUntilFinished, 1000) {
+        timer = object : CountDownTimer(millisUntilFinished, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val second = floor((millisUntilFinished.toDouble() / 1000) % 60).toInt()
                 val minutes = floor((millisUntilFinished.toDouble() / (1000 * 60)) % 60).toInt()
@@ -31,6 +32,10 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             }
 
         }.start()
+    }
+
+    fun timerPause() {
+        timer.cancel()
     }
 
 }
