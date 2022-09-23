@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.pomodorotimer.R
 import com.example.pomodorotimer.databinding.FragmentMainBinding
 import com.example.pomodorotimer.utilits.APP_ACTIVITY
+import com.example.pomodorotimer.utilits.AppPreferences
+import com.example.pomodorotimer.utilits.minutesToMillis
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
 
 class MainFragment : Fragment() {
@@ -18,7 +20,7 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
     lateinit var viewModel: MainViewModel
     private lateinit var circularProgressBar: CircularProgressBar
-    private var millis: Long = 1_500_000
+//    private var millis: Long = 1_500_000
     private var isStartOver = true
 
     override fun onCreateView(
@@ -33,6 +35,8 @@ class MainFragment : Fragment() {
         super.onStart()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         initialization()
+        val minutes = AppPreferences.getTimeToWork()
+        val millis = minutesToMillis(minutes)
         circularProgressBar = binding.circularProgressBar
         circularProgressBar.apply {
             progressMax = millis.toFloat()
@@ -44,18 +48,22 @@ class MainFragment : Fragment() {
         initBinding()
 
         viewModel.liveDataSeconds.observe(this, Observer {
-            binding.startTimeSeconds.text = it
+            binding.timerTimeSeconds.text = it
         })
         viewModel.liveDataMinutes.observe(this, Observer {
-            binding.startTimeMinutes.text = it
+            binding.timerTimeMinutes.text = it
         })
         viewModel.liveDataMillisUntilFinished.observe(this, Observer {
-            millis = it.toLong()
-            circularProgressBar.progress = 1_500_000 - it.toFloat()
+            val minutes = AppPreferences.getTimeToWork()
+            val millis = minutesToMillis(minutes)
+            circularProgressBar.progress = millis - it.toFloat()
         })
     }
 
     private fun initBinding() {
+        val workTime = AppPreferences.getTimeToWork()
+        binding.timerTimeMinutes.text = workTime.toString()
+
         binding.startBtnPlay.setOnClickListener {
             binding.startBtnPlay.visibility = View.GONE
             binding.startBtnPause.visibility = View.VISIBLE
@@ -92,6 +100,10 @@ class MainFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun restMode() {
+
     }
 
 }

@@ -24,18 +24,18 @@
         app:layout_constraintVertical_bias="0.499" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/labelTimeToRest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Working"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/startTimeMinutes"
+        app:layout_constraintBottom_toTopOf="@+id/timer_time_minutes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/startTimeMinutes"
+        android:id="@+id/timer_time_minutes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="25"
@@ -46,7 +46,7 @@
         app:layout_constraintTop_toTopOf="@+id/circularProgressBar" />
 
     <TextView
-        android:id="@+id/startTimeSeconds"
+        android:id="@+id/timer_time_seconds"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="00"
@@ -55,7 +55,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/circularProgressBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/startTimeMinutes" />
+        app:layout_constraintTop_toBottomOf="@id/timer_time_minutes" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/startBtnPlay"

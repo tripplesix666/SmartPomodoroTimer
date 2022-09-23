@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.pomodorotimer.R
 import com.example.pomodorotimer.utilits.APP_ACTIVITY
+import com.example.pomodorotimer.utilits.AppPreferences
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,5 +18,6 @@ class MainActivity : AppCompatActivity() {
 
         APP_ACTIVITY = this
         navController = Navigation.findNavController(this, R.id.navHostFragmentContainer)
+        AppPreferences.getPreference(this)
     }
 }

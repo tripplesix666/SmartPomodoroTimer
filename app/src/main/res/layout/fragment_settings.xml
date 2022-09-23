@@ -8,7 +8,7 @@
     tools:context=".screens.settings.SettingsFragment">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/labelSelectLanguage"
         style="@style/headings"
         android:text="@string/settings_select_language"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,19 +19,34 @@
         style="@style/simple_text"
         android:text="@string/settings_russian_language"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/labelSelectLanguage" />
 
 
     <!--    Working Slider-->
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/labelTimeToWork"
         style="@style/headings"
         android:text="Время концентрации:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/timeToWork"
+        style="@style/headings"
+        android:gravity="start"
+        tools:text="5"
+        app:layout_constraintStart_toEndOf="@id/labelTimeToWork"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+        style="@style/headings"
+        android:text="мин"
+        app:layout_constraintBottom_toBottomOf="@+id/timeToWork"
+        app:layout_constraintStart_toEndOf="@+id/timeToWork"
+        app:layout_constraintTop_toTopOf="@+id/timeToWork" />
+
+    <TextView
+        android:id="@+id/minValueWorkSlider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/app_large_margin"
@@ -40,10 +55,10 @@
         android:textColor="@color/white"
         android:textSize="@dimen/app_normal_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView4" />
+        app:layout_constraintTop_toBottomOf="@id/labelTimeToWork" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/maxValueWorkSlider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/app_large_margin"
@@ -64,7 +79,7 @@
         android:valueTo="60"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/minValueWorkSlider"
         app:thumbColor="@color/white"
         app:tickVisible="false"
         app:trackColor="@color/white" />
@@ -72,7 +87,7 @@
 
     <!--    Rest Slider-->
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/labelTimeToRest"
         style="@style/headings"
         android:gravity="start"
         android:text="Время отдыха:"
@@ -80,23 +95,38 @@
         app:layout_constraintTop_toBottomOf="@+id/workingSlider" />
 
     <TextView
+        android:id="@+id/timeToRest"
+        style="@style/headings"
+        android:gravity="start"
+        tools:text="5"
+        app:layout_constraintStart_toEndOf="@id/labelTimeToRest"
+        app:layout_constraintTop_toBottomOf="@+id/workingSlider" />
+
+    <TextView
+        style="@style/headings"
+        android:text="мин"
+        app:layout_constraintBottom_toBottomOf="@+id/timeToRest"
+        app:layout_constraintStart_toEndOf="@+id/timeToRest"
+        app:layout_constraintTop_toTopOf="@+id/timeToRest" />
+
+    <TextView
         android:id="@+id/minValueRestSlider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/app_large_margin"
         android:layout_marginTop="@dimen/app_margin"
-        android:text="5"
+        android:text="1"
         android:textColor="@color/white"
         android:textSize="@dimen/app_normal_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/labelTimeToRest" />
 
     <TextView
         android:id="@+id/maxValueRestSlider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/app_large_margin"
-        android:text="60"
+        android:text="25"
         android:textColor="@color/white"
         android:textSize="@dimen/app_normal_text"
         app:layout_constraintBottom_toTopOf="@+id/restSlider"
@@ -119,6 +149,7 @@
         app:trackColor="@color/white" />
 
     <Button
+        android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/app_margin"
