@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.pomodorotimer.R
 import com.example.pomodorotimer.databinding.FragmentMainBinding
+import com.example.pomodorotimer.utilits.APP_ACTIVITY
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
 
 class MainFragment : Fragment() {
@@ -17,19 +19,19 @@ class MainFragment : Fragment() {
     lateinit var viewModel: MainViewModel
     private lateinit var circularProgressBar: CircularProgressBar
     private var millis: Long = 1_500_000
+    private var isStartOver = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         initialization()
         circularProgressBar = binding.circularProgressBar
         circularProgressBar.apply {
@@ -49,7 +51,7 @@ class MainFragment : Fragment() {
         })
         viewModel.liveDataMillisUntilFinished.observe(this, Observer {
             millis = it.toLong()
-            circularProgressBar.progress = 10_000f - it.toFloat()
+            circularProgressBar.progress = 1_500_000 - it.toFloat()
         })
     }
 
@@ -57,27 +59,35 @@ class MainFragment : Fragment() {
         binding.startBtnPlay.setOnClickListener {
             binding.startBtnPlay.visibility = View.GONE
             binding.startBtnPause.visibility = View.VISIBLE
+            binding.startBtnStop.visibility = View.GONE
+            binding.startBtnSettings.visibility = View.GONE
 
-            if (binding.minutesToWorking.text.isNotEmpty()) {
-                val minutes = binding.minutesToWorking.text.toString().toInt()
-                millis = convertMinutesToMillis(minutes)
-            }
-            viewModel.startTimer(millis)
+            viewModel.timerStart(isStartOver)
         }
 
         binding.startBtnPause.setOnClickListener {
             binding.startBtnPlay.visibility = View.VISIBLE
             binding.startBtnPause.visibility = View.GONE
+            binding.startBtnStop.visibility = View.VISIBLE
 
+            isStartOver = false
             viewModel.timerPause()
         }
-    }
 
-    private fun convertMinutesToMillis(testMinutes: Int): Long {
-        val millis = testMinutes * 60_000
-        return millis.toLong()
-    }
+        binding.startBtnStop.setOnClickListener {
+            binding.startBtnStop.visibility = View.GONE
+            binding.startBtnPause.visibility = View.GONE
+            binding.startBtnPlay.visibility = View.VISIBLE
+            binding.startBtnSettings.visibility = View.VISIBLE
 
+            isStartOver = true
+            viewModel.timerStop()
+        }
+
+        binding.startBtnSettings.setOnClickListener {
+            APP_ACTIVITY.navController.navigate(R.id.action_mainFragment_to_settingsFragment)
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

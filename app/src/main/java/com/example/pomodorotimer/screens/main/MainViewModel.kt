@@ -14,12 +14,19 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     val liveDataMillisUntilFinished = MutableLiveData<String>()
     private lateinit var timer: CountDownTimer
 
-    fun startTimer(millisUntilFinished: Long) {
-        showToast("$millisUntilFinished")
-        timer = object : CountDownTimer(millisUntilFinished, 1000) {
+    private val totalTime: Long = 1_500_000
+    var millis = 0L
+
+    fun timerStart(isStartOver: Boolean) {
+        millis = if (isStartOver) {
+            totalTime
+        } else {
+            liveDataMillisUntilFinished.value?.toLong() ?: totalTime
+        }
+        timer = object : CountDownTimer(millis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                val second = floor((millisUntilFinished.toDouble() / 1000) % 60).toInt()
-                val minutes = floor((millisUntilFinished.toDouble() / (1000 * 60)) % 60).toInt()
+                val second = millisToSeconds(millisUntilFinished)
+                val minutes = millisToMinutes(millisUntilFinished)
                 liveDataSeconds.value = second.toString()
                 liveDataMinutes.value = minutes.toString()
                 liveDataMillisUntilFinished.value = millisUntilFinished.toString()
@@ -34,8 +41,30 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         }.start()
     }
 
+    private fun millisToMinutes(millis: Long) =
+        floor((millis.toDouble() / (1000 * 60)) % 60).toInt()
+
+    private fun millisToSeconds(millis: Long) =
+        floor((millis.toDouble() / 1000) % 60).toInt()
+
+//    fun timerResume() {
+//        liveDataMillisUntilFinished.value?.let { timerStart(it.toLong()) }
+//    }
+
     fun timerPause() {
         timer.cancel()
+    }
+
+//    fun convertAndStartTimer(minutes: Long) {
+//        val millis = minutes * 60_000
+//        timerStart()
+//    }
+
+    fun timerStop() {
+        timerPause()
+        liveDataMillisUntilFinished.value = totalTime.toString()
+        liveDataMinutes.value = millisToMinutes(totalTime).toString()
+        liveDataSeconds.value = millisToSeconds(totalTime).toString()
     }
 
 }
