@@ -10,13 +10,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val liveDataSeconds = MutableLiveData<String>()
     val liveDataMinutes = MutableLiveData<String>()
-    val liveDataMillisUntilFinished = MutableLiveData<String>()
+    val liveDataForProgress = MutableLiveData<String>()
+    val liveDataForProgressRest = MutableLiveData<String>()
     private lateinit var timer: CountDownTimer
     val liveDataIsWorking = MutableLiveData<Boolean>()
 
-//    init {
-//        liveDataIsWorking.value = true
-//    }
+    init {
+        liveDataIsWorking.value = true
+    }
 
     fun timerStart(isStartOver: Boolean, modeTimer: String) {
 
@@ -27,7 +28,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 if (isStartOver) {
                     startTimer(millis)
                 } else {
-                    val millis = liveDataMillisUntilFinished.value?.toLong()
+                    val millis = liveDataForProgress.value?.toLong()
                     millis?.let { startTimer(it) }
                 }
             }
@@ -37,7 +38,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 if (isStartOver) {
                     startTimer(millis)
                 } else {
-                    val millis = liveDataMillisUntilFinished.value?.toLong()
+                    val millis = liveDataForProgress.value?.toLong()
                     millis?.let { startTimer(it) }
                 }
             }
@@ -52,14 +53,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val minutes = millisToMinutes(millisUntilFinished)
                 liveDataSeconds.value = second.toString()
                 liveDataMinutes.value = minutes.toString()
-                liveDataMillisUntilFinished.value = millisUntilFinished.toString()
+                liveDataForProgress.value = millisUntilFinished.toString()
 
             }
 
             override fun onFinish() {
-                timerModeIsRest = !timerModeIsRest
-                liveDataIsWorking.value = !timerModeIsRest
-                //                liveDataIsWorking.value = !liveDataIsWorking.value!!
+//                timerModeIsRest = !timerModeIsRest
+//                liveDataIsWorking.value = !timerModeIsRest
+                liveDataIsWorking.value = !liveDataIsWorking.value!!
 
                 showToast("Завершено")
             }
@@ -69,15 +70,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun timerPause() {
         timer.cancel()
-    }
-
-    fun timerStop() {
-        timerPause()
-        val minutes = AppPreferences.getTimeToWork()
-        val millis = minutesToMillis(minutes)
-        liveDataMillisUntilFinished.value = millis.toString()
-        liveDataMinutes.value = millisToMinutes(millis).toString()
-        liveDataSeconds.value = millisToSeconds(millis).toString()
     }
 
 }

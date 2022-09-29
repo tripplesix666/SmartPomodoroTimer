@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        timerModeIsRest = true
+        timerModeIsRest = false
         APP_ACTIVITY = this
         navController = Navigation.findNavController(this, R.id.navHostFragmentContainer)
         AppPreferences.getPreference(this)

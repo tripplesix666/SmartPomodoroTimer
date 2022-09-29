@@ -33,22 +33,19 @@ class MainFragment : Fragment() {
         super.onStart()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
-        val minutes = AppPreferences.getTimeToWork()
-        val millis = minutesToMillis(minutes)
-        circularProgressBar = binding.circularProgressBar
-        circularProgressBar.apply {
-            progressMax = millis.toFloat()
-        }
         initialization()
     }
 
     private fun initialization() {
 
-        if(timerModeIsRest) {
-            restTimerMode()
-        } else {
-            workTimerMode()
-        }
+        initBinding()
+        circularProgressBar = binding.circularProgressBar
+
+//        if (timerModeIsRest) {
+//            restTimerMode()
+//        } else {
+//            workTimerMode()
+//        }
 
         viewModel.liveDataSeconds.observe(this, Observer {
             binding.timerTimeSeconds.text = it
@@ -56,11 +53,7 @@ class MainFragment : Fragment() {
         viewModel.liveDataMinutes.observe(this, Observer {
             binding.timerTimeMinutes.text = it
         })
-        viewModel.liveDataMillisUntilFinished.observe(this, Observer {
-            val minutes = AppPreferences.getTimeToWork()
-            val millis = minutesToMillis(minutes)
-            circularProgressBar.progress = millis - it.toFloat()
-        })
+
 
         viewModel.liveDataIsWorking.observe(this, Observer {
             if (!it) {
@@ -68,31 +61,11 @@ class MainFragment : Fragment() {
             } else {
                 workTimerMode()
             }
+
         })
     }
 
-    private fun restTimerMode() {
-        val workTime = AppPreferences.getTimeToRest()
-        binding.timerTimeMinutes.text = workTime.toString()
-
-        binding.root.setBackgroundColor(ContextCompat.getColor(APP_ACTIVITY, R.color.rest))
-        binding.labelTimerMode.text = getString(R.string.timerModeRest)
-
-        binding.startBtnStop.visibility = View.GONE
-        binding.startBtnPause.visibility = View.GONE
-        binding.startBtnPlay.visibility = View.VISIBLE
-        binding.startBtnSettings.visibility = View.VISIBLE
-
-        binding.startBtnStop.setOnClickListener {
-            binding.startBtnStop.visibility = View.GONE
-            binding.startBtnPause.visibility = View.GONE
-            binding.startBtnPlay.visibility = View.VISIBLE
-            binding.startBtnSettings.visibility = View.VISIBLE
-
-            isStartOver = true
-            viewModel.timerStop()
-        }
-
+    private fun initBinding() {
 
         binding.startBtnPause.setOnClickListener {
             binding.startBtnPlay.visibility = View.VISIBLE
@@ -103,79 +76,97 @@ class MainFragment : Fragment() {
             viewModel.timerPause()
         }
 
-        binding.startBtnSettings.setOnClickListener {
-            APP_ACTIVITY.navController.navigate(R.id.action_mainFragment_to_settingsFragment)
+    }
+
+    private fun restTimerMode() {
+        val restMinutes = AppPreferences.getTimeToRest()
+        val restMillis = minutesToMillis(restMinutes)
+
+        circularProgressBar.progressMax = restMillis.toFloat()
+
+        viewModel.liveDataForProgress.observe(this) {
+                circularProgressBar.progress = restMillis - it.toFloat()
         }
 
-        isStartOver = true
+        binding.timerTimeMinutes.text = restMinutes.toString()
+        binding.labelTimerMode.text = getString(R.string.timerModeRest)
+        binding.root.setBackgroundColor(ContextCompat.getColor(APP_ACTIVITY, R.color.rest))
+
+        initBtns()
 
         binding.startBtnPlay.setOnClickListener {
-            binding.startBtnPlay.visibility = View.GONE
-            binding.startBtnPause.visibility = View.VISIBLE
-            binding.startBtnStop.visibility = View.GONE
-            binding.startBtnSettings.visibility = View.GONE
-
+            initBtnPlay()
             viewModel.timerStart(isStartOver, MODE_REST)
         }
 
-        val minutes = AppPreferences.getTimeToWork()
-        val millis = minutesToMillis(minutes)
-        circularProgressBar.progress = millis.toFloat()
-    }
-
-    private fun workTimerMode() {
-        val workTime = AppPreferences.getTimeToWork()
-        binding.timerTimeMinutes.text = workTime.toString()
-
-        binding.labelTimerMode.text = getString(R.string.timerModeWork)
-
-        binding.startBtnPause.visibility = View.GONE
-        binding.startBtnPlay.visibility = View.VISIBLE
-        binding.startBtnSettings.visibility = View.VISIBLE
-
-
-        binding.root.setBackgroundColor(ContextCompat.getColor(APP_ACTIVITY, R.color.working))
-
-        binding.startBtnPlay.setOnClickListener {
-            binding.startBtnPlay.visibility = View.GONE
-            binding.startBtnPause.visibility = View.VISIBLE
-            binding.startBtnStop.visibility = View.GONE
-            binding.startBtnSettings.visibility = View.GONE
-
-            viewModel.timerStart(isStartOver, MODE_WORK)
-        }
-
-        binding.startBtnPause.setOnClickListener {
-            binding.startBtnPlay.visibility = View.VISIBLE
-            binding.startBtnPause.visibility = View.GONE
-            binding.startBtnStop.visibility = View.VISIBLE
-
-            isStartOver = false
-            viewModel.timerPause()
-        }
-
         binding.startBtnStop.setOnClickListener {
-            binding.startBtnStop.visibility = View.GONE
-            binding.startBtnPause.visibility = View.GONE
-            binding.startBtnPlay.visibility = View.VISIBLE
-            binding.startBtnSettings.visibility = View.VISIBLE
-
+            initBtns()
+            binding.circularProgressBar.progress = 0f
+            binding.timerTimeMinutes.text = restMinutes.toString()
+            binding.timerTimeSeconds.text = "00"
             isStartOver = true
-            viewModel.timerStop()
+            viewModel.timerPause()
         }
 
         binding.startBtnSettings.setOnClickListener {
             APP_ACTIVITY.navController.navigate(R.id.action_mainFragment_to_settingsFragment)
         }
+
+    }
+
+    private fun workTimerMode() {
+        val workMinutes = AppPreferences.getTimeToWork()
+        val workMillis = minutesToMillis(workMinutes)
+
+        circularProgressBar.progressMax = workMillis.toFloat()
+
+        viewModel.liveDataForProgress.observe(this) {
+            circularProgressBar.progress = workMillis - it.toFloat()
+        }
+
+        binding.timerTimeMinutes.text = workMinutes.toString()
+        binding.labelTimerMode.text = getString(R.string.timerModeWork)
+        binding.root.setBackgroundColor(ContextCompat.getColor(APP_ACTIVITY, R.color.working))
+
+        initBtns()
+
+        binding.startBtnPlay.setOnClickListener {
+            initBtnPlay()
+            viewModel.timerStart(isStartOver, MODE_WORK)
+        }
+
+        binding.startBtnStop.setOnClickListener {
+            initBtns()
+            binding.circularProgressBar.progress = 0f
+            binding.timerTimeMinutes.text = workMinutes.toString()
+            binding.timerTimeSeconds.text = "00"
+            isStartOver = true
+            viewModel.timerPause()
+        }
+
+        binding.startBtnSettings.setOnClickListener {
+            APP_ACTIVITY.navController.navigate(R.id.action_mainFragment_to_settingsFragment)
+        }
+
+    }
+
+    private fun initBtns() {
+        binding.startBtnPlay.visibility = View.VISIBLE
+        binding.startBtnStop.visibility = View.GONE
+        binding.startBtnPause.visibility = View.GONE
+        binding.startBtnSettings.visibility = View.VISIBLE
+    }
+
+    private fun initBtnPlay() {
+        binding.startBtnPlay.visibility = View.GONE
+        binding.startBtnStop.visibility = View.GONE
+        binding.startBtnPause.visibility = View.VISIBLE
+        binding.startBtnSettings.visibility = View.GONE
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    fun restMode() {
-
     }
 
 }
